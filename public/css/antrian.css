@@ -1,0 +1,53 @@
+body {
+    background-color: #2a3f54;
+    color: white;
+}
+.col1 {
+    padding: 30px;
+    margin: auto;
+}
+.col2 {
+    padding: 60px;
+    margin: auto;
+    text-align: center;
+}
+
+.col1 span {
+    font-size: 24px;
+}
+.col1 h1 {
+    font-size: 44px;
+}
+.col1 h1 span {
+    font-size: 64px;
+    font-weight: bolder;
+}
+.antrian {
+    text-align: center;
+}
+table {
+    font-size: 20px;
+    text-align: center;
+}
+
+table thead tr td {
+    color: white;
+    font-weight: bold;
+}
+table tbody tr td {
+    color: white;
+    font-size: 26px;
+    /* font-weight: bold; */
+}
+
+.col2 p {
+    font-size: 24px;
+}
+.col2 h1 {
+    font-size: 90px;
+    font-weight: bold;
+}
+.col2 h2 {
+    margin: 30px;
+    font-weight: bold;
+}
