@@ -133,8 +133,9 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-md-8 col-sm-8 offset-md-2" style="text-align:center; font-size:15px;">Uang Bayar </label>
-                                <div class="col-md-10 col-sm-10 offset-md-1 ">
+                                <div class="col-md-10 col-sm-10 offset-md-1 " id="alertpayment">
                                     <input id="cash" name="cash" type="number" class="form-control" style="border-radius:5px;text-align:center;font-size:24px; color:#5A738E; font-weight:bold;">
+
                                 </div>
                             </div>
                             <div class="form-group row">

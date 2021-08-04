@@ -6,6 +6,7 @@ use App\Models\Outcome;
 use App\Models\Employe;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Branchstore;
 use DataTables;
 use PDF;
 use Illuminate\Support\Facades\DB;
@@ -90,9 +91,11 @@ class OutcomeController extends Controller
         }
         
         if (Auth::user()->role == 'kasir') {
+            // $branch = Employe::where('id_user', Auth::user()->id)->latest()->first();
             return view('kasir.outcome.index', compact('branch'));
         }else {
-            return view('admin.outcome.index');
+            $branch2 = Branchstore::all()->sortBy('branch_name');
+            return view('admin.outcome.index', compact('branch2'));
         }
     }
 
@@ -101,13 +104,28 @@ class OutcomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $data = Outcome::with('branch')->get()
-        ->sortByDesc('id_outcome');
+        // return response()->json($request->starts);
+        if ($request->starts == null) {
+            $data = Outcome::with('branch')
+            ->get()
+            ->sortByDesc('id_outcome');
+        }else{
+            $startDate = Carbon::createFromFormat('m/d/Y', $request->starts);
+            $endDate = Carbon::createFromFormat('m/d/Y', $request->end);
+            $data = Outcome::with('branch')
+            ->whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<=', $endDate)
+            // ->sortByDesc('id_outcome')
+            ->get();
+        }
+                // return response()->json($data);
+        return view('admin.outcome.laporanpengeluaran',['data'=>$data, 'start'=>$request->starts, 'end' =>$request->end]);
+        
         // return response()->json($data);
         // return view('admin.outcome.laporanpengeluaran', compact());
-        return view('admin.outcome.laporanpengeluaran',['data'=>$data]);
+        // return view('',['data'=>$data]);
     	// return $pdf->stream('laporanpengeluaran.pdf', array("Attachment" => false));
     }
 
@@ -204,6 +222,13 @@ class OutcomeController extends Controller
                     ->whereDate('outcome.created_at', '<=', $endDate)
                     ->select('outcome.*', 'branchstore.branch_name')
                     ->get();
+                }else{
+                    $data = DB::table('Outcome')
+                    ->leftJoin('branchstore', 'outcome.id_branch', '=', 'branchstore.id_branch')
+                    ->orderBy('outcome.created_at', 'DESC')
+                    ->where('outcome.id_branch', $type)
+                    ->select('outcome.*', 'branchstore.branch_name')
+                    ->get();
                 }
                 return Datatables::of($data)
                             ->addIndexColumn()
@@ -249,6 +274,7 @@ class OutcomeController extends Controller
                     ->leftJoin('branchstore', 'outcome.id_branch', '=', 'branchstore.id_branch')
                     ->orderBy('outcome.created_at', 'DESC')
                     ->whereDate('outcome.created_at',$operator, $type)
+                    ->where('outcome.id_branch', '=', $id_branch)
                     ->select('outcome.*', 'branchstore.branch_name')
                     ->get();
     }

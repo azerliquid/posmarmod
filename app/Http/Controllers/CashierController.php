@@ -144,6 +144,18 @@ class CashierController extends Controller
         // return response()->json($broadcast_item);
         event(new SendListOrder($invoice, $broadcast_item, $invoice->id_branch));
         event(new SendInformation($invoice, $invoice->id_branch));
+
+        $nota = DB::table('invoice')
+        ->leftJoin('shopping', 'invoice.id_invoice', '=', 'shopping.id_invoice')
+        ->leftJoin('employe', 'invoice.id_cashier', '=', 'employe.id_user')
+        ->leftJoin('branchstore', 'invoice.id_branch', '=', 'branchstore.id_branch')
+        ->leftJoin('products', 'shopping.id_product', '=', 'products.id_product')
+        ->select('invoice.*', 'employe.name','branchstore.branch_name', 'shopping.price', 'shopping.qty', 'shopping.totals', 'products.name_products')
+        ->where('invoice.id_invoice', $invoice->id_invoice) 
+        // ->leftJoin('products', 'shopping.id_product', '=', 'products.id_product')
+        ->get();
+
+        return response()->json(['success' => 'Transaksi Berhasil Ditambah !', 'nota' => $nota]);
     }
 
     /**

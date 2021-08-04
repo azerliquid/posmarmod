@@ -8,14 +8,18 @@
     <!-- /top tiles -->
     <div class="col-md-12 col-sm-12  ">
         <div class="x_panel">
-            <div class="x_title">
+            <div class="x_title mx-auto">
             <h2>Table Data Riwayat Transaksi</h2>
             <ul class="nav navbar-right panel_toolbox">
                 <div class="input-group">
+                <input id="curentData" type="hidden" data-branch="all" data-periode="all" data-date="all">
+
                 
-                <a target="_blank" rel="noopener noreferrer" class="btn btn-primary setTypePrint" data-print="yoi" href="{{route('reporttransaction.create')}}"><i class="fa fa-print"></i> Print</a>
+                <a target="_blank" style="height:45px;"  rel="noopener noreferrer" class="btn btn-info setTypePrint" data-print="yoi" href="{{route('reporttransaction.create')}}"><i class="fa fa-print"></i> Print</a>
+                <!-- <button style="height:45px;"  rel="noopener noreferrer" class="btn btn-info " data-toggle="modal" data-target="#modal-print"data-print="yoi" href="{{route('reporttransaction.create')}}"><i class="fa fa-print"></i> Print</button> -->
                     
-                        <button type="button" class="btn btn-success dropdown-toggle"  data-toggle="dropdown"
+                    <div class="btn-group">
+                        <button style="height:45px;" type="button" class="btn btn-success dropdown-toggle"  data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-sort-amount-asc"></i> Filter Periode
                         </button>
@@ -28,18 +32,42 @@
                             <div class="dropdown-divider"></div>
                             <!-- <a class="dropdown-item" href="#">Separa</a> -->
                         </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                        
+                    <div class="btn-group branch" data-branch="all">
+                        <button style="height:45px;"  type="button" class="btn btn-success dropdown-toggle"  data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-sort-amount-asc"></i> Filter Cabang
+                        </button>
+                        <div class="dropdown-menu periode ">
+                            <a class="dropdown-item" href="{{ route('reporttransaction.index')}}">Semua Cabang</a>
+                            @forelse($branch as $b)
+                            <button class="dropdown-item" onclick="generateDatatables({{$b->id_branch}})">{{$b->branch_name}}</button>
+                            @empty
+                            <button class="dropdown-item"">Tidak Ada Cabang Tersedia</button>
+                            @endforelse
+                            <div class="dropdown-divider"></div>
+                            <!-- <a class="dropdown-item" href="#">Separa</a> -->
+                        </div>
+                    </div>
+        
+                    <div class="clearfix"></div>
+
+                        
                     <!-- <fieldset> -->
                     <div class="control-group daterange">
                         <div class="controls">
                         <div class="input-prepend input-group">
-                            <span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
-                            <input type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" value="07/07/2021 - 07/11/2021">
+                            <span style="height:45px; class="add-on input-group-addon"></span>
+                            <input style="height:45px; type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" value="07/07/2021 - 07/11/2021">
+                            <a style="height:45px; color:white;" rel="noopener noreferrer" class="btn btn-primary setDataBetween">Sortir</a>
                         </div>
                         </div>
                     </div>
                     
                     <!-- </fieldset> -->
-                    <a target="_blank" rel="noopener noreferrer" class="btn btn-primary setDataBetween">Sortir</a>
                 </div>
             </ul>
             <div class="clearfix"></div>

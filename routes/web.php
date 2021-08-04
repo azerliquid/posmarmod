@@ -9,6 +9,7 @@ use App\Http\Controllers\CatUnitController;
 use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\BranchstoreController;
 use App\Http\Controllers\OutcomeController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\InvoiceController;
@@ -28,17 +29,19 @@ use App\Http\Controllers\HistoryTransactionsController;
 */
 
 Route::get('/', function () {
-    if (Auth::user()->role == 'admin') {
-        return route('product.index');
-     }
-     elseif (Auth::user()->role == 'kasir') {
-         return route('cashier.index');
-     }elseif (Auth::user()->role == 'dapur') {
-         return url('listorder');
-     }
-     else{
-         return view('auth.login');
-     }
+
+    if (Auth::check()) {
+        if (Auth::user()->role == "admin") {
+            return redirect('/product');
+        }elseif (Auth::user()->role == "kasir") {
+            return redirect('/cashier');
+        }elseif (Auth::user()->role == "dapur") {
+            return redirect('/listorder');
+        }
+    }else {
+        
+        return view('auth.login');
+    }
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'checkRole:admin']], function(){
@@ -48,8 +51,10 @@ Route::group(['middleware' => ['auth:sanctum', 'checkRole:admin']], function(){
     Route::resource('branchstore', BranchStoreController::Class);
     Route::resource('reporttransaction', HistoryTransactionsController::Class);
     Route::resource('reportoutcome', OutcomeController::Class);
+    Route::resource('reportincome', IncomeController::Class);
     Route::resource('dashboard', DashboardController::Class);
     Route::post('/reporttransaction/create', [HistoryTransactionsController::class, 'create']);
+    Route::post('/printinvoice', [HistoryTransactionsController::class, 'printinvoice']);
 
 });
 
@@ -59,6 +64,7 @@ Route::group(['middleware' => ['auth:sanctum', 'checkRole:kasir']], function(){
     Route::resource('historytransactions', HistoryTransactionsController::Class);
     Route::get('/queue', [QueueInformation::class, 'index']);
     Route::post('/queue/getData', [QueueInformation::class, 'getData']);
+    Route::post('/printinvoice', [HistoryTransactionsController::class, 'printinvoice']);
 
 });
 
@@ -67,3 +73,7 @@ Route::group(['middleware' => ['auth:sanctum', 'checkRole:dapur']], function(){
     Route::post('/listorder/update', [ListOrderController::class, 'update']);
 
 });
+
+// Route::fallback(function () {
+//     return redirect("/");
+// });

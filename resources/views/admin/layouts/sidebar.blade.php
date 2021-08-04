@@ -9,7 +9,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="{{asset('gentelella-master/production/images//img.jpg')}}" alt="..." class="img-circle profile_img">
+                <img src="{{Auth::user()->profile_photo_url}}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Selemat Datang,</span>
@@ -39,9 +39,9 @@
                   </li>
                   <li><a href="{{ route('reporttransaction.index') }}"><i class="fa fa-bar-chart-o"></i>Laporan Transaksi</a>
                   </li>
-                  <li><a><i class="fa fa-bar-chart-o"></i>Laporan Pendapatan</a>
+                  <li><a href="{{ route('reportincome.index') }}"><i class="fa fa-money"></i>Laporan Pendapatan</a>
                   </li>
-                  <li><a href="{{ route('reportoutcome.index') }}"><i class="fa fa-bar-chart-o"></i>Laporan Pengeluaran</a>
+                  <li><a href="{{ route('reportoutcome.index') }}"><i class="fa fa-share-square-o"></i>Laporan Pengeluaran</a>
                   </li>
                 </ul>
               </div>
@@ -93,10 +93,13 @@
 
             <!-- /menu footer buttons -->
             <div class="sidebar-footer hidden-small">
-            
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
+            <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="{{route('logout')}}"
+                                         onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+            </form>
             </div>
             <!-- /menu footer buttons -->
           </div>

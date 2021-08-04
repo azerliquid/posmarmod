@@ -35,10 +35,10 @@
                   <ul class=" navbar-right">
                     <li class="nav-item dropdown open" style="padding-left: 15px;">
                       <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                        <img src="{{asset('gentelella-master/production/images/img.jpg')}}" alt="">{{ Auth::user()->employe->name }}
+                        <img src="{{Auth::user()->profile_photo_url}}" alt="">{{ Auth::user()->employe->name }}
                       </a>
                       <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item"  href="javascript:;"> Profile</a>
+                        <!-- <a class="dropdown-item"  href="javascript:;"> Profile</a> -->
                       <form method="POST" action="{{ route('logout') }}">
                       @csrf
                         <a class="dropdown-item" href="{{ route('logout') }}"
@@ -59,7 +59,7 @@
             <nav aria-label="Page navigation example">
               <ul class="pagination pagination-lg justify-content-center">
                 <li class="page-item active"><a class="page-link" href="">Pesanan Tersedia</a></li>
-                <li class="page-item"><a class="page-link" onclick="getData('done')">Pesanan Selesai</a></li>
+                <!-- <li class="page-item"><a class="page-link" onclick="getData('done')">Pesanan Selesai</a></li> -->
               </ul>
             </nav>
             <h1 id="databaru"></h1>
@@ -98,7 +98,7 @@
                                   @if($data[$i]->status == 1)
                                     <a  id="text{{$data[$i]->id_shopping}}" style="font-size:16px;">Sudah dibuat</a>
                                   @else
-                                    <a  id="btn{{$data[$i]->id_shopping}}" onclick='start({{$data[$i]->id_shopping}},{{ $data[$i]->id_invoice}})' style="color:white; font-size:16px;" class="btn btn-md btn-primary" >Buat</a>
+                                    <a  id="btn{{$data[$i]->id_shopping}}" onclick='start({{$data[$i]->id_shopping}},{{ $data[$i]->id_invoice }},{{ $data[$i]->qty}})' style="color:white; font-size:16px;" class="btn btn-md btn-primary" >Buat</a>
                                   @endif
                                   </td>
                             </tr>
@@ -110,7 +110,7 @@
                                   @if($data[$i]->status == 1)
                                     <a  id="text{{$data[$i]->id_shopping}}" style="font-size:16px;" >Sudah dibuat</a>
                                   @else
-                                    <a  id="btn{{$data[$i]->id_shopping}}" onclick='start({{$data[$i]->id_shopping}},{{ $data[$i]->id_invoice}})' style="color:white; font-size:16px;" class="btn btn-md btn-primary" >Buat</a>
+                                    <a  id="btn{{$data[$i]->id_shopping}}" onclick='start({{$data[$i]->id_shopping}},{{ $data[$i]->id_invoice }},{{ $data[$i]->qty}})' style="color:white; font-size:16px;" class="btn btn-md btn-primary" >Buat</a>
                                   @endif
                                   </td>
                             </tr>
@@ -139,7 +139,7 @@
 
         <script>
         // Enable pusher logging - don't include this in production
-        // Pusher.logToConsole = true;
+        Pusher.logToConsole = true;
 
         var pusher = new Pusher('fd04b2a927367843c92f', {
           cluster: 'ap1'
@@ -149,16 +149,17 @@
         channel.bind('my-event', function(data) {
           var dataObj = JSON.stringify(data);
           var data = JSON.parse(dataObj);
+          console.log(data);
           var rowspan = data.broadcast_item.length;
           var markup = ``;
           console.log(rowspan);
           for (let i = 0; i < rowspan; i++) {
-              markup += `<tr style="background-color:#d5dcf5;">
-              ${i == 0 && `<td id="rowspan${data.invoice.id_invoice}-${i}" style="font-size:28px; text-align:center;" rowspan="">${data.invoice.queue}</td>`}
+              markup += `<tr class="row${data.invoice.id_invoice}">
+              ${i == 0 && `<td id="rowspan${data.invoice.id_invoice}-${i}" style="font-size:28px; font-style:bold; text-align: center;" rowspan="">${data.invoice.queue}</td>`}
               <td style="font-size:16px;" class="" rowspan="">${data.broadcast_item[i].name_products}</td>
               <td style="font-size:16px; text-align:center;" class="" rowspan="">${data.broadcast_item[i].qty}</td>
-              <td class="" rowspan="">
-              <a  id="${data.broadcast_item[i].id}" onclick="start(${data.broadcast_item[i].id},${data.invoice.id_invoice})" style="color:white; font-size:16px;" class="btn btn-md btn-primary" >ٍBuat</a>
+              <td id="rowaction${data.broadcast_item[i].id_shopping}" class="" rowspan="">
+              <a  id="btn${data.broadcast_item[i].id_shopping}" onclick="start(${data.broadcast_item[i].id_shopping},${data.invoice.id_invoice},${data.broadcast_item[i].qty})" style="color:white; font-size:16px;" class="btn btn-md btn-primary" >Buat</a>
               </td>
               </tr>`;
           }
@@ -171,7 +172,7 @@
       // const d = new Date.now();
       let times = [];
 
-      function start(id, id_invoice) {
+      function start(id, id_invoice, qty) {
         var d = new Date();
         var n = d.getTime();
         console.log('start: '+n);
@@ -180,17 +181,42 @@
             id:id,
             start:n
             });
+            var url = "/listorder/update";
+            var data = {id:id, time:null, id_invoice:id_invoice}
+            
+            $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+            });
+            jQuery.ajax({
+              url: url,
+              method: 'POST',
+              data:data,
+              success: function(result){
+                  jQuery('.alert').show();
+                  jQuery('.alert').html(result.success);
+                  console.log(result);
+                  // window.location.href = "listorder";
+              },
+              error:function(error){
+                  console.log(error.responseText);
+              }
+            });
+            
             $('#btn'+id).text('Selesai');
             $('#btn'+id).css('background-color', 'orange');
 
         }else{
             var hasil;
             for (let i = 0; i < times.length; i++) {
-            if (times[i].id == id) {
-                hasil = Math.abs(n - times[i].start);
-            }
+              if (times[i].id == id) {
+                  hasil = (Math.abs(n - times[i].start))/ qty;
+              }
             
             }
+            console.log(qty);
+            console.log(hasil);
             var url = "/listorder/update";
             var data= {id:id,time:hasil, id_invoice:id_invoice};
             $.ajaxSetup({
@@ -212,14 +238,12 @@
                   }
                   $('#btn'+id).remove();
                   $('#text'+id).css('display', 'block');
-                  var status = `<a  id="text${id}" font-size:14px;" >Sudah dibuat</a>`;
+                  var status = `<a  id="text${id}" style="font-size:16px;" >Sudah dibuat</a>`;
                   $('#rowaction'+id).append(status);
-
-
-            },
-            error:function(error){
-                console.log(error.responseText);
-            }
+              },
+              error:function(error){
+                  console.log(error.responseText);
+              }
             });
         }
 

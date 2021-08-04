@@ -18,6 +18,8 @@
         <div class="col-md-7 col-sm-7 ">
           <input type="text" required="required" class="form-control" name="name">
           <input id="inputJenis" type="hidden" required="required" class="form-control" name="jenis" value="">
+          <!-- <small style="color:red">Nama Kategori wajib diisi.</small> -->
+
         </div>
       </div>
       <div class="modal-footer">

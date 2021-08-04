@@ -2,9 +2,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>Martabak Modern</title>
 
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="tex    t/html; charset=UTF-8">
         <!-- Meta, title, CSS, favicons, etc. -->
         <meta charset="utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -37,6 +37,13 @@
         <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
 
+        <!-- sweetalert -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+
+
 
         <!-- <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
@@ -53,6 +60,7 @@
                     @include('kasir.layouts.sidebar')
                 @endif
                 @include('layouts.admin.topnav')
+                @include('sweetalert::alert')
                 @yield('content')
                 @include('layouts.admin.footer')
             </div>

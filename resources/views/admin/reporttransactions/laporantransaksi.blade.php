@@ -9,7 +9,7 @@
 	<div class="container">
 		<center>
 			<h4>Laporan Transaksi</h4>
-			<p>Periode : {{ $start. ' - ' .$end}}</p>
+			<p>Periode : {{ $start == null ? "Semua" :  $start. ' - ' .$end}}</p>
             </center>
 		<br/>
 		<table class='table table-bordered'>

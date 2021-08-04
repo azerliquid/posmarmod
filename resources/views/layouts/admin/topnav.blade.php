@@ -22,7 +22,7 @@
                   </div>
                 </li>
 
-                <li role="presentation" class="nav-item dropdown open">
+                <!-- <li role="presentation" class="nav-item dropdown open">
                 
                   <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
                     <li class="nav-item">
@@ -82,7 +82,7 @@
                       </div>
                     </li>
                   </ul>
-                </li>
+                </li> -->
               </ul>
             </nav>
           </div>

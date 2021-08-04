@@ -45,7 +45,7 @@
 
                 <!-- Table row -->
                 <div class="row">
-                <div class="  table">
+                <div class=" table">
                     <table class="table table-striped">
                     <thead>
                         <tr>
@@ -67,7 +67,6 @@
                 
                 <!-- /.col -->
                 <div class="col-md-12">
-                    <p class="lead" id="date">Amount Due 2/22/2014</p>
                     <div class="table-responsive">
                     <table class="table">
                         <tbody>
@@ -92,19 +91,19 @@
                 <!-- /.row -->
 
                 <!-- this row will not appear when printing -->
-                <div class="row no-print">
+                <!-- <div class="row no-print">
                 <div class=" ">
-                    <button class="btn btn-default" onclick="getprint()"><i class="fa fa-print"></i> Print</button>
                     <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
                     <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
                 </div>
-                </div>
+                </div> -->
             </section>
             </div>
         </div>
       <div class="modal-footer">
+        <button class="btn btn-default" onclick="getprint()"><i class="fa fa-print"></i> Print</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <!-- <button type="submit" class="btn btn-primary">Save changes</button> -->
       </div>
       </form>
 
@@ -115,6 +114,44 @@
 </div>
 <!-- end Modal Edit -->
 
+
+<!-- modal print -->
+
+
+<!-- <div id="modal-print" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel2">Filter data yang akan dicetak</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form id="printForm" method="POST">
+      <div class="modal-body">
+      
+      <div class="item form-group">
+        <label class="col-form-label col-md-3 col-sm-3 label-align" >Tanggal <span class="required">*</span>
+        </label>
+        <div class="col-md-7">
+            <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                <i class="fa fa-calendar"></i>
+                <span>June 30, 2021 - July 28, 2021</span> <b class="caret"></b>
+            </div>
+        </div>
+      </div>
+
+      </div>
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </form>
+      </div>
+
+    </div>
+  </div>
+</div> -->
 
 <script>
     $('.setDataBetween').on('click', function() {
@@ -235,11 +272,17 @@
 
     // print invoice
     function getprint() {
+        var invoice = $('#invoice b').text().replace("Invoice : ", "");
         var printContents = document.getElementById("inv_print").innerHTML;
         var originalContents = document.body.innerHTML;
-        // document.body.innerHTML = printContents;
+        document.body.innerHTML = printContents;
+        document.title = invoice;
         window.print();
-        // document.body.innerHTML = originalContents;
+        window.location.href = '/reporttransaction';
+        document.body.innerHTML = originalContents;
+        // console.log(document.body.innerHTML);
+        // $('#modal-detail').modal('hide');
+        console.log('oke');
     }
 
 

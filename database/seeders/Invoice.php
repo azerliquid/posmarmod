@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use Faker\Factory as Faker;
+use Carbon\Carbon;
 
 class Invoice extends Seeder
 {
@@ -55,18 +56,20 @@ class Invoice extends Seeder
             10000,
             11000
         ];
+        $date = Carbon::now()->subDays(4);
 
-        $invoice=614;
-        for ($i=1; $i<53; $i++) { 
+        $invoice=832;
+        for ($i=1; $i<23; $i++) { 
             DB::table('invoice')->insert([
-                'invoice' =>  "INV21071150". $i,
+                'invoice' =>  "INV21070950". $i,
                 'queue' => $i,
-                'id_cashier' => 15,
-                'id_branch' => 45,
+                'id_cashier' => 12,
+                'id_branch' => 50,
                 'cash_return' => $return = $faker->numberBetween(1000, 10000),
                 'pay' => $pay = $faker->numberBetween(30000,120000),
                 'cash' => $pay - $return,
                 'status' => 1,
+                'created_at' => $date
             ]);
             
             $item = $faker->randomElement($array = array (1,2,3));
@@ -77,14 +80,16 @@ class Invoice extends Seeder
                 $index = $faker->randomElement($array = array (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14));
 
                 DB::table('shopping')->insert([
-                    'id_branch' => 45,
+                    'id_branch' => 50,
                     'id_invoice' => $invoice,
                     'id_product' => $id_product[$index],
                     'qty' => $qty = $faker->randomElement($array = array (1,2,3)),
                     'price' => $price[$index],
                     'totals' => $price[$index] * $qty,
                     'status' => 1,
-                    'served' => $faker->numberBetween(380000,700000),
+                    'served' => 1000 * $faker->numberBetween(380,700),
+                    'created_at' => $date
+
                 ]);
             }
 

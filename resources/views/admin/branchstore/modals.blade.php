@@ -10,26 +10,26 @@
         </button>
       </div>
       <div class="modal-body">
-      <form id="tambahForm" action="{{ Route('branchstore.store') }}" method="POST" data-parsley-validate class="form-horizontal form-label-left">
+      <form id="tambahForm" method="POST" data-parsley-validate class="form-horizontal form-label-left">
       {{ csrf_field() }}
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nama Cabang <span class="required">*</span>
-        </label>
-        <div class="col-md-7 col-sm-7 ">
-          <input type="text" required="required" class="form-control" name="name_branch">
+        </label> 
+        <div class="col-md-7 col-sm-7 " id="tambahname">
+          <input type="text" required="required" class="form-control" name="branch_name">
         </div>
       </div>
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align" >No Telp <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
+        <div class="col-md-7 col-sm-7 " id="tambahphone">
           <input type="number" name="phone" required="required" class="form-control">
         </div>
       </div>
-      <div class="item form-group">
+      <div class="item form-group" >
         <label class="col-form-label col-md-3 col-sm-3 label-align">Lokasi Cabang <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
+        <div class="col-md-7 col-sm-7 " id="tambahaddress">
             <textarea class="form-control" rows="3" placeholder="Masukan Alamat Cabang" name="address"></textarea>
         </div>
       </div>
@@ -41,7 +41,7 @@
             <option value="">Pilih Kasir</option>
             @php $i = 1 @endphp
             @forelse ($data['employe'] as $c)
-            <option value="{{$c['id_employe']}}">{{ $c['name']}}</option>
+            <option value="{{$c['id_employe']}}" style="color:{{ $c['branch'] == null ? 'blue' : ''}}">{{ $c['name']. ($c['branch'] == null ? ' (kosong)' : ' ('. $c['branch']->branch_name.')')}}</option>
             @empty
             <td colspan="9">Tidak ada data</td>
             @endforelse
@@ -56,7 +56,7 @@
             <option value="">Pilih Dapur</option>
             @php $i = 1 @endphp
             @forelse ($data['employe'] as $c)
-            <option value="{{$c['id_employe']}}">{{ $c['name']}}</option>
+            <option value="{{$c['id_employe']}}" style="color:{{ $c['branch'] == null ? 'blue' : ''}}">{{ $c['name'] }} <strong>{{ ($c['branch'] == null ? ' (kosong)' : ' ('. $c['branch']->branch_name.')')}} </strong></option>
             @empty
             <td colspan="9">Tidak ada data</td>
             @endforelse
@@ -71,7 +71,7 @@
             <option value="">Pilih Dapur 2</option>
             @php $i = 1 @endphp
             @forelse ($data['employe'] as $c)
-            <option value="{{$c['id_employe']}}">{{ $c['name']}}</option>
+            <option value="{{$c['id_employe']}}" style="color:{{ $c['branch'] == null ? 'blue' : ''}}">{{ $c['name']. ($c['branch'] == null ? ' (kosong)' : ' ('. $c['branch']->branch_name.')')}}</option>
             @empty
             <td colspan="9">Tidak ada data</td>
             @endforelse
@@ -80,7 +80,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button id="btnTambah" type="submit" class="btn btn-primary">Save changes</button>
       </div>
       </form>
 
@@ -108,18 +108,18 @@
           <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nama Cabang <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
-          <input type="text" required="required" class="form-control" name="name_branch">
+        <div class="col-md-7 col-sm-7 " id="editname">
+          <input type="text" required="required" class="form-control" name="branch_name">
         </div>
       </div>
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align" >No Telp <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
+        <div class="col-md-7 col-sm-7 " id="editphone">
           <input type="text" name="phone" required="required" class="form-control">
         </div>
       </div>
-      <div class="item form-group">
+      <div class="item form-group" id="editaddress">
         <label class="col-form-label col-md-3 col-sm-3 label-align">Lokasi Cabang <span class="required">*</span>
         </label>
         <div class="col-md-7 col-sm-7 ">
@@ -127,6 +127,7 @@
         </div>
       </div>
       <div class="item form-group">
+        <input type="hidden" name="id_cashier" value="" >
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Kasir <span class="required">*</span>
         </label>
         <div class="col-md-7 col-sm-7 ">
@@ -134,7 +135,7 @@
             <option value="">Pilih Dapur</option>
                 @php $i = 1 @endphp
                 @forelse ($data['employe'] as $c)
-                <option value="{{$c['id_employe']}}">{{ $c['name']}}</option>
+                <option value="{{$c['id_employe']}}" style="color:{{ $c['branch'] == null ? 'blue' : ''}}">{{ $c['name']. ($c['branch'] == null ? ' (kosong)' : ' ('. $c['branch']->branch_name.')')}}</option>
                 @empty
                 <td colspan="9">Tidak ada data</td>
                 @endforelse
@@ -142,6 +143,7 @@
         </div>
       </div>
       <div class="item form-group">
+      <input type="hidden" name="id_chef" value="">
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Dapur <span class="required">*</span>
         </label>
         <div class="col-md-7 col-sm-7 ">
@@ -149,7 +151,7 @@
             <option value="">Pilih Dapur</option>
               @php $i = 1 @endphp
               @forelse ($data['employe'] as $c)
-              <option value="{{$c['id_employe']}}">{{ $c['name']}}</option>
+              <option value="{{$c['id_employe']}}" style="color:{{ $c['branch'] == null ? 'blue' : ''}}">{{ $c['name']. ($c['branch'] == null ? ' (kosong)' : ' ('. $c['branch']->branch_name.')')}}</option>
               @empty
               <td colspan="9">Tidak ada data</td>
               @endforelse
@@ -157,6 +159,8 @@
         </div>
       </div>
       <div class="item form-group">
+      <input type="hidden" name="id_chef2" value="" >
+
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Dapur 2 <span class="required">*</span>
         </label>
         <div class="col-md-7 col-sm-7 ">
@@ -165,7 +169,7 @@
             <option value="">Pilih Dapur 2</option>
             @php $i = 1 @endphp
             @forelse ($data['employe'] as $c)
-            <option value="{{$c['id_employe']}}">{{ $c['name']}}</option>
+            <option value="{{$c['id_employe']}}" style="color:{{ $c['branch'] == null ? 'blue' : ''}}">{{ $c['name']. ($c['branch'] == null ? ' (kosong)' : ' ('. $c['branch']->branch_name.')')}}</option>
             @empty
             <td colspan="9">Tidak ada data</td>
             @endforelse
@@ -175,7 +179,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button id="btnEdit" type="submit" class="btn btn-primary">Save changes</button>
       </div>
       </form>
 
@@ -234,8 +238,11 @@
         var col7 = currow.find('td:eq(6)').data('id');
         var id = $(this).data('id');
         console.log('col5   === '+col5);
-        $('input[name$="name_branch"]').val(col2);
+        $('input[name$="branch_name"]').val(col2);
         $('input[name$="phone"]').val(col3);
+        $('input[name$="id_cashier"]').val(col5);
+        $('input[name$="id_chef"]').val(col6);
+        $('input[name$="id_chef2"]').val(col7);
         $('textarea[name$="address"]').val(col4);
         if (col5) {
           $('.cashier').val(parseInt(col5)).change();
@@ -254,12 +261,74 @@
     });
 
     $('.table tbody').on('click', '.hapusModal', function(){
-    var id = $(this).data('id');
-    var url = '{{ route("branchstore.destroy", ":id") }}';
-    url = url.replace(':id', id);
-    $('#hapusForm').attr('action' , url);
-    $('#confirmHapusModal').modal("show");
+      var id = $(this).data('id');
+      var url = '{{ route("branchstore.destroy", ":id") }}';
+      url = url.replace(':id', id);
+      $('#hapusForm').attr('action' , url);
+      $('#confirmHapusModal').modal("show");
     });
+
+    $('body').on('click', "#btnTambah", function() {
+      event.preventDefault();
+      var tambah = $('#tambahForm');
+      var formData = tambah.serialize();
+      var url = `{{Route("branchstore.store")}}`;
+      var jenis = 'tambah';
+      console.log(jenis);
+      var type = 'POST'
+      setValidate(url, type, formData, jenis);      
+    })
+
+    $('body').on('click', "#btnEdit", function() {
+      event.preventDefault();
+      var tambah = $('#editForm');
+      var formData = tambah.serialize();
+      var url = $('#editForm').attr('action');
+      var jenis = 'edit';
+      var type = 'PUT'
+      setValidate(url, type, formData, jenis);      
+    })
+
+    function setValidate(url, type, formData, jenis) {
+      $( `#${jenis}name small` ).remove();
+      $( `#${jenis}phone small` ).remove();
+      $( `#${jenis}address small` ).remove();
+      $.ajax({
+        url: url,
+        type: type,
+        data:formData,
+        success:function (data) {
+            console.log(data);
+            if(data.errors) {
+                    if(data.errors.branch_name){
+                        $( `#${jenis}name` ).append(`<small style="color:red">${data.errors.branch_name[0]}</small>`);
+                    }
+                    if(data.errors.phone){
+                        $( `#${jenis}phone` ).append(`<small style="color:red">${data.errors.phone[0]}</small>`);
+                    }
+                    if(data.errors.address){
+                        $( `#${jenis}address` ).append(`<small style="color:red">${data.errors.address[0]}</small>`);
+                    }
+                    
+              }
+              if(data.success) {
+                  $(`#modal-${jenis}`).modal('hide');
+                  Swal.fire({
+                    icon: 'success',
+                    title: data.success,
+                    showConfirmButton: false,
+                    timer: 1500
+                  })
+                  location.reload();
+              }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            // console.log(xhr.status);
+            console.log(xhr.responseText);
+            // console.log(thrownError);
+        },
+      });
+    }
 
 
 </script>

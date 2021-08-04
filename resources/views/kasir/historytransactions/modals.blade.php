@@ -91,20 +91,13 @@
                 </div>
                 <!-- /.row -->
 
-                <!-- this row will not appear when printing -->
-                <div class="row no-print">
-                <div class=" ">
-                    <button class="btn btn-default" onclick="getprint()"><i class="fa fa-print"></i> Print</button>
-                    <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
-                    <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
-                </div>
-                </div>
             </section>
             </div>
         </div>
       <div class="modal-footer">
+        <button class="btn btn-default" data-invoice="" onclick="getprint()"><i class="fa fa-print"></i> Print</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <!-- <button type="submit" class="btn btn-primary">Save changes</button> -->
       </div>
       </form>
 
@@ -129,6 +122,7 @@
         console.log(type);
         generateDatatables(type);
     });
+
     var myDt=$('.datatable').DataTable({
         processing: true,
         serverSide: true,
@@ -244,11 +238,19 @@
 
     // print invoice
     function getprint() {
+        var invoice = $('#invoice b').text().replace("Invoice : ", "");
+        
         var printContents = document.getElementById("inv_print").innerHTML;
+        // console.log(printContents);
         var originalContents = document.body.innerHTML;
-        // document.body.innerHTML = printContents;
+        document.body.innerHTML = printContents;
+        document.title=invoice;
         window.print();
-        // document.body.innerHTML = originalContents;
+        window.location.href = '/historytransactions';
+        document.body.innerHTML = originalContents;
+        // console.log(document.body.innerHTML);
+        // $('#modal-detail').modal('hide');
+        // console.log('oke');
     }
 
     function setSelesai(id) {
@@ -270,7 +272,7 @@
                 if (result == 'success') {
                     $('#btn'+id).remove();
                 }
-                // window.location.href = "listorder";
+                window.location.href = "historytransactions";
             },
             error:function(error){
                 console.log(error.responseText);

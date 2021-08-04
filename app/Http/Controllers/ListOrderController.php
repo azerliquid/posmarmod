@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Invoice;
 use App\Models\Shopping;
 use App\Models\User;
+use App\Events\NotifFinishedOrder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -29,7 +30,7 @@ class ListOrderController extends Controller
         // ->where('invoice.id_invoice', $id)
         ->whereDate('invoice.created_at', $now)
         ->where('invoice.id_branch', $user->employe->id_branch)
-        ->where('invoice.status', 0)
+        ->whereIn('invoice.status', [0,2])
         
         // ->leftJoin('products', 'shopping.id_product', '=', 'products.id_product')
         ->get();
@@ -55,13 +56,25 @@ class ListOrderController extends Controller
     {
         // return response()->json($request);
         // dd($request);
-        $shopping = Shopping::find($request->id);
-        $shopping->served = $request->time;
-        $shopping->status = 1;
-
-        $shopping->save();
-
-        $check = Shopping::where('status', 0)->where('id_invoice', $request->id_invoice)->get();
-        return response()->json($check);
+        if ($request->time == null) {
+            $invoice = Invoice::find($request->id_invoice);
+            $invoice->status = 2;
+    
+            $invoice->save();
+            
+            $user = User::where('id', Auth::user()->id)->with('employe')->latest()->first();
+            
+            event(new NotifFinishedOrder($request->id, $user->employe->id_branch));
+        }else {
+            
+            $shopping = Shopping::find($request->id);
+            $shopping->served = $request->time;
+            $shopping->status = 1;
+    
+            $shopping->save();
+    
+            $check = Shopping::where('status', 0)->where('id_invoice', $request->id_invoice)->get();
+            return response()->json($check);
+        }
     }
 }

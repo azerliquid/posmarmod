@@ -164,6 +164,7 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Mavinoo\Batch\BatchServiceProvider::class,
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         
 
         /*
@@ -237,6 +238,7 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Pusher' => Pusher\Pusher::class,
         'Batch' => Mavinoo\Batch\BatchFacade::class,
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
     ],
 
 ];

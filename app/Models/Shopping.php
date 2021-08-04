@@ -17,4 +17,9 @@ class Shopping extends Model
     {
         return $this->hasMany(Product::class, 'id_product', 'id_product');
     }
+    
+    public function products(Type $var = null)
+    {
+        return $this->hasOne(Product::class, 'id_product', 'id_product');
+    }
 }

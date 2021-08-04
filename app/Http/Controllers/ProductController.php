@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Unit;
-
+use Validator;
 use DataTables;
+use Response;
 
 class ProductController extends Controller
 {
@@ -73,16 +74,42 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = new Product;
-        $product->code_products = $request->code_product;
-        $product->name_products = $request->name;
-        $product->id_categorys = $request->category;
-        $product->id_units = $request->unit;
-        $product->price = $request->price;
-        $product->deleted = 0;
-        $product->save();
+        $rules = [
+            'code_products' => 'required|unique:products|max:9',
+            'name_products' => 'required|regex:/^[\pL\s\-]+$/u',
+            'id_categorys' => 'required',
+            'id_units' => 'required',
+            'price' => 'required|regex:/^(\d+(,\d{1,2})?)?$/',
+        ];
 
-        return redirect()->route('product.index');
+        $messages =  [
+            'code_products.required' => 'Kode produk wajib di isi',
+            'code_products.unique' => 'Kode produk sudah terdaftar',
+            'code_products.max' => 'Kode produk maksimal 9 karakter',
+            'name_products.required' => 'Nama produk wajib di isi',
+            'name_products.regex' => 'Nama produk hanya di isi alfabet',
+            'id_categorys.required' => 'Kategori wajib di isi',
+            'id_units.required' => 'Unit wajib di isi',
+            'price.required' => 'Harga wajib di isi',
+            'price.regex' => 'Format harga salah, contoh : 200000',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->passes()) {
+            $product = new Product;
+            $product->code_products = $request->code_products;
+            $product->name_products = $request->name_products;
+            $product->id_categorys = $request->id_categorys;
+            $product->id_units = $request->id_units;
+            $product->price = $request->price;
+            $product->deleted = 0;
+            $product->save();
+            return Response::json(['success' => 'Data Berhasil Diinputkan !']);
+
+        }
+        return Response::json(['errors' => $validator->errors()]);
+
     }
 
     /**
@@ -116,16 +143,43 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // die($request);
-        $product = Product::find($id);
-        $product->id_product = $id;
-        $product->code_products = $request->code_product;
-        $product->name_products = $request->name;
-        $product->id_categorys = $request->category;
-        $product->id_units = $request->unit;
-        $product->price = $request->price;
-        $product->save();
-        return redirect()->route('product.index');
+        $rules = [
+            'code_products' => 'required|unique:products,code_products,'.$id.',id_product|max:9',
+            'name_products' => 'required|regex:/^[\pL\s\-]+$/u',
+            'id_categorys' => 'required',
+            'id_units' => 'required',
+            'price' => 'required|regex:/^(\d+(,\d{1,2})?)?$/',
+        ];
+
+        $messages =  [
+            'code_products.required' => 'Kode produk wajib di isi',
+            'code_products.unique' => 'Kode produk sudah terdaftar',
+            'code_products.max' => 'Kode produk maksimal 9 karakter',
+            'name_products.required' => 'Nama produk wajib di isi',
+            'name_products.regex' => 'Nama produk hanya di isi alfabet',
+            'id_categorys.required' => 'Kategori wajib di isi',
+            'id_units.required' => 'Unit wajib di isi',
+            'price.required' => 'Harga wajib di isi',
+            'price.regex' => 'Format harga salah, contoh : 200000',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->passes()) {
+            
+            // die($request);
+            $product = Product::find($id);
+            $product->id_product = $id;
+            $product->name_products = $request->name_products;
+            $product->id_categorys = $request->id_categorys;
+            $product->id_units = $request->id_units;
+            $product->price = $request->price;
+            $product->save();
+            return Response::json(['success' => 'Data Berhasil Diubah !']);
+
+        }
+
+        return Response::json(['errors' => $validator->errors()]);
     }
 
     /**
@@ -139,6 +193,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->deleted = 1;
         $product->save();
-        return redirect()->route('product.index');
+        
+        return Response::json(['success' => 'Data Berhasil Dihapus !']);
     }
 }

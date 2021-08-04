@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
     $('.setDataBetween').on('click', function() {
             console.log('APP BTN CHANGE');
         var value = $("input[name=reservation]").val();
@@ -9,16 +9,15 @@
         type=`custom?end=${to}&starts=${from}`;
         console.log(type);
         generateDatatables(type);
-        var log = $('.setTypePrint').attr('href',`/reportoutcome/create?end=${to}&starts=${from}`);
+        var log = $('.setTypePrint').attr('href',`/reportincome/create?end=${to}&starts=${from}`);
         // console.log(log);
     });
-
 
     var myDt=$('.datatable').DataTable({
         processing: true,
         serverSide: true,
         ajax:{
-            url:"/reportoutcome/",
+            url:"/reportincome/",
             error: function (xhr, ajaxOptions, thrownError) {
                 // console.log(xhr.status);
                 console.log(xhr.responseText);
@@ -28,14 +27,11 @@
         ,
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'branch_name', name: 'branch_name'},
-            {data: 'cashier_name', name: 'cashier_name'},
-            {data: 'prices', name: 'prices', orderable: false, searchable: false},
-            {data: 'qty', name: 'qty', orderable: false, searchable: false},
-            {data: 'outcomes', name: 'outcomes', orderable: false, searchable: false},
-            {data: 'datebaru', name: 'datebaru' },
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'cabang', name: 'cabang'},
+            {data: 'item_sold', name: 'item_sold'},
+            {data: 'income', name: 'income'},
+            {data: 'outcome', name: 'outcome'},
+            {data: 'profit', name: 'profit'},
         ],
         language: {
             emptyTable: "Tidak ada data tersedia",
@@ -44,10 +40,8 @@
     });
 
     function generateDatatables(params) {
-        console.log(params);
-        console.log(myDt)
-        var urlBaru = "/reportoutcome/"+params
+        var urlBaru = "/reportincome/"+params
         myDt.ajax.url(urlBaru).load();   
              
     }
-  </script>
+</script>

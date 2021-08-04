@@ -10,28 +10,28 @@
         </button>
       </div>
       <div class="modal-body">
-      <form id="tambahForm" action="{{ Route('product.store') }}" method="POST" data-parsley-validate class="form-horizontal form-label-left">
+      <form id="tambahForm" method="POST" data-parsley-validate class="form-horizontal form-label-left">
       {{ csrf_field() }}
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Kode Produk <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
-          <input type="text" required="required" class="form-control" name="code_product">
+        <div class="col-md-7 col-sm-7 " id="tambahcode">
+          <input type="text" required="required" class="form-control" name="code_products">
         </div>
       </div>
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Nama Produk <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
-          <input type="text" name="name" required="required" class="form-control">
+        <div class="col-md-7 col-sm-7 " id="tambahname">
+          <input type="text" name="name_products" required="required" class="form-control">
         </div>
       </div>
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Kategori <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
-          <select class="form-control" name="category">
-            <option>Pilih Kategori</option>
+        <div class="col-md-7 col-sm-7 " id="tambahcategory">
+          <select class="form-control" name="id_categorys">
+            <option value="">Pilih Kategori</option>
             @php $i = 1 @endphp
             @forelse ($data['category'] as $c)
             <option value="{{$c['id_categorys']}}">{{ $c['categorys']}}</option>
@@ -44,9 +44,9 @@
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Unit <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
-          <select class="form-control" name="unit">
-            <option>Pilih Unit</option>
+        <div class="col-md-7 col-sm-7 " id="tambahunit">
+          <select class="form-control" name="id_units">
+            <option  value="">Pilih Unit</option>
             @php $i = 1 @endphp
             @forelse ($data['unit'] as $u)
             <option value="{{$u['id_units']}}">{{ $u['units']}}</option>
@@ -54,18 +54,19 @@
             <td colspan="9">Tidak ada data</td>
             @endforelse
           </select>
+
         </div>
       </div>
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align">Price <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
-          <input class="date-picker form-control" required="required" type="number" name="price">
+        <div class="col-md-7 col-sm-7 " id="tambahprice">
+          <input class="date-picker form-control" required="required" type="text" name="price">
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-primary" id="btnTambah">Save changes</button>
       </div>
       </form>
 
@@ -90,26 +91,26 @@
       <form id="editForm" method="POST" data-parsley-validate class="form-horizontal form-label-left">
           {{ csrf_field() }}
           {{ method_field('PUT') }}
-      <div class="item form-group">
+      <div class="item form-group" >
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Kode Produk <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
-          <input type="text" id="first-name" required="required" class="form-control" name="code_product">
+        <div class="col-md-7 col-sm-7 " id="editcode">
+          <input type="text" id="first-name" required="required" class="form-control" name="code_products">
         </div>
       </div>
-      <div class="item form-group">
+      <div class="item form-group" >
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Nama Produk <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
-          <input type="text" id="last-name" name="name" required="required" class="form-control">
+        <div class="col-md-7 col-sm-7 " id="editname"> 
+          <input type="text" id="last-name" name="name_products" required="required" class="form-control">
         </div>
       </div>
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Kategori <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
-          <select class="form-control category" name="category">
-            <option>Pilih Kategori</option>
+        <div class="col-md-7 col-sm-7 " id="editcategory">
+          <select class="form-control category" name="id_categorys">
+            <option value="">Pilih Kategori</option>
             @php $i = 1 @endphp
             @forelse ($data['category'] as $c)
             <option value="{{$c['id_categorys']}}">{{ $c['categorys']}}</option>
@@ -122,9 +123,9 @@
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Unit <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
-          <select class="form-control units" name="unit">
-            <option>Pilih Unit</option>
+        <div class="col-md-7 col-sm-7 "  id="editunit">
+          <select class="form-control units" name="id_units">
+            <option value="">Pilih Unit</option>
             @php $i = 1 @endphp
             @forelse ($data['unit'] as $u)
             <option value="{{$u['id_units']}}">{{ $u['units']}}</option>
@@ -137,13 +138,13 @@
       <div class="item form-group">
         <label class="col-form-label col-md-3 col-sm-3 label-align">Price <span class="required">*</span>
         </label>
-        <div class="col-md-7 col-sm-7 ">
+        <div class="col-md-7 col-sm-7 "  id="editprice">
           <input class="date-picker form-control" required="required" type="number" name="price">
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button id="btnEdit" type="submit" class="btn btn-primary">Save changes</button>
       </div>
       </form>
 
@@ -173,7 +174,7 @@
             {{ method_field('DELETE') }}
         
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button id="btnHapus" type="submit" class="btn btn-primary">Save changes</button>
       </form>
       </div>
 
@@ -183,10 +184,17 @@
 
 
 <script>
-    $('.datatable').DataTable({
+      var myDt = $('.datatable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('product.index') }}",
+        ajax:{
+            url:"{{ route('product.index') }}",
+            error: function (xhr, ajaxOptions, thrownError) {
+                // console.log(xhr.status);
+                console.log(xhr.responseText);
+                // console.log(thrownError);
+            },
+        },
         columns: [
             {data: 'DT_RowIndex',name: 'DT_RowIndex'},
             {data: 'code_products', name: 'code_products'},
@@ -211,8 +219,8 @@
         var col6 = currow.find('td:eq(5)').text().split("Rp. ");
         console.log(currow);
         var id = $(this).data('id');
-        $('input[name$="code_product"]').val(col2);
-        $('input[name$="name"]').val(col3);
+        $('input[name$="code_products"]').val(col2);
+        $('input[name$="name_products"]').val(col3);
         $('.category').val(parseInt(col4)).change();
         $('.units').val(parseInt(col5)).change();
         $('input[name$="price"]').val(parseInt(col6[1]));
@@ -231,6 +239,99 @@
       $('#confirmHapusModal').modal("show");
     });
     
+    $('body').on('click', "#btnTambah", function() {
+      event.preventDefault();
+      var tambah = $('#tambahForm');
+      var formData = tambah.serialize();
+      var url = `{{Route("product.store")}}`;
+      var jenis = 'tambah';
+      console.log(jenis);
+      var type = 'POST'
+      setValidate(url, type, formData, jenis);
+    })
+
+    $('body').on('click', "#btnEdit", function() {
+      event.preventDefault();
+      var edit = $('#editForm');
+      var formData = edit.serialize();
+      var url = $('#editForm').attr('action');
+      var jenis = 'edit';
+      console.log(url);
+      var type = 'PUT'
+      setValidate(url, type, formData, jenis);
+    })
+
+    $('body').on('click', "#btnHapus", function() {
+      event.preventDefault();
+      var hapus = $('#hapusForm');
+      var formData = hapus.serialize();
+      var url = $('#hapusForm').attr('action');
+      $.ajax({
+        url: url,
+        type: 'DELETE',
+        data:formData,
+        success:function (data) {
+              if(data.success) {
+                  $(`#modal-hapus`).modal('hide');
+                  Swal.fire({
+                    icon: 'success',
+                    title: data.success,
+                    showConfirmButton: false,
+                    timer: 1500
+                  })
+                  myDt.ajax.url('/product').load();
+              }
+        },
+      });
+    })
+
+    function setValidate(url, type, formData, jenis) {
+      $( `#${jenis}code small` ).remove();
+      $( `#${jenis}name small` ).remove();
+      $( `#${jenis}category small` ).remove();
+      $( `#${jenis}unit small` ).remove();
+      $( `#${jenis}price small` ).remove();
+      $.ajax({
+        url: url,
+        type: type,
+        data:formData,
+        success:function (data) {
+            console.log(data.errors);
+            if(data.errors) {
+                    if(data.errors.code_products){
+                        $( `#${jenis}code` ).append(`<small style="color:red">${data.errors.code_products[0]}</small>`);
+                    }
+                    if(data.errors.name_products){
+                        $( `#${jenis}name` ).append(`<small style="color:red">${data.errors.name_products[0]}</small>`);
+                    }
+                    if(data.errors.id_categorys){
+                        $( `#${jenis}category` ).append(`<small style="color:red">${data.errors.id_categorys[0]}</small>`);
+                    }
+                    if(data.errors.id_units){
+                        $( `#${jenis}unit` ).append(`<small style="color:red">${data.errors.id_units[0]}</small>`);
+                    }
+                    if(data.errors.price){
+                        $( `#${jenis}price` ).append(`<small style="color:red">${data.errors.price[0]}</small>`);
+                    }
+              }
+              if(data.success) {
+                  $(`#modal-${jenis}`).modal('hide');
+                  Swal.fire({
+                    icon: 'success',
+                    title: data.success,
+                    showConfirmButton: false,
+                    timer: 1500
+                  })
+                  myDt.ajax.url('/product').load();
+              }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            // console.log(xhr.status);
+            console.log(xhr.responseText);
+            // console.log(thrownError);
+        },
+      });
+    }
     
     
 </script>

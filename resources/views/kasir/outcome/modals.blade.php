@@ -19,13 +19,17 @@
         </label>
         <div class="col-md-7 col-sm-7 ">
           <input type="text" required="required" class="form-control" name="name">
+          <!-- <small style="color:red;">Nama pengeluaran wajib diisi.</small> -->
+
         </div>
       </div>
       <div class="item form-group">
-        <label class="col-form-label col-md-3 col-sm-3 label-align" >Price <span class="required">*</span>
+        <label class="col-form-label col-md-3 col-sm-3 label-align" >Harga <span class="required">*</span>
         </label>
         <div class="col-md-7 col-sm-7 ">
           <input id="price" type="number" name="price" required="required" class="form-control">
+          <!-- <small style="color:red;">Harga wajib diisi.</small> -->
+
         </div>
       </div>
       <div class="item form-group">
@@ -33,6 +37,8 @@
         </label>
         <div class="col-md-7 col-sm-7 ">
           <input id="qty" type="number" name="qty" required="required" class="form-control">
+          <!-- <small style="color:red;">Jumlah wajib diisi.</small> -->
+
         </div>
       </div>
       <div class="item form-group">
@@ -40,6 +46,8 @@
         </label>
         <div class="col-md-7 col-sm-7 ">
           <input id="outcome" type="number" name="outcome" required="required" class="form-control" value="">
+          <!-- <small style="color:red;">Total pengeluaran tidak sama dengan total harga x jumlah.</small> -->
+
         </div>
       </div>
       <div class="modal-footer">

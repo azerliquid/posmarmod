@@ -28,7 +28,7 @@
                             
                             </div>
                             <div class="col-md-6 col1" id="block2">
-                                <h1>Total Antrian <span id="totalqueue"> </span></h1>
+                                <h1>Total Antrian <span id="totalqueue">0</span></h1>
                             </div>
                         </div>
                     </div>
@@ -40,20 +40,22 @@
                             <td>Antrian</td>
                             <td>Estimasi Waktu Tunggu</td>
                             <td>Estimasi Waktu Selesai</td>
+                            <td>Status</td>
                         </tr>
                     </thead>
                     <tbody>
                         
                     </tbody>
                 </table>
+                <h1 id="antriankosong" style="text-align:center; margin:80px; font-width:bold; font-size:64px"></h1>
             </div>
             <div class="col-4 col2">
                 <p>Antrian Saat Ini</p>
-                <h1 id="firstqueue"></h1>
+                <h1 id="firstqueue">-</h1>
                 <p>Estimasi Waktu Tunggu</p>
-                <h2 id="firstwaiting">10 Menit</h2>
+                <h2 id="firstwaiting">- Menit</h2>
                 <p>Estimasi Waktu Selesai</p>
-                <h2 id="firstestimate">20:10:31 WIB</h2>
+                <h2 id="firstestimate">-</h2>
             </div>
         </div>
     </div>
@@ -79,7 +81,7 @@
                     success: function(result){
                         jQuery('.alert').show();
                         jQuery('.alert').html(result.success);
-                        console.log(result);
+                        // console.log(result);
                         setData(result);
                         time();
                     },
@@ -95,23 +97,29 @@
             // id_branch = data.id_branch;
             invoice = data.invoice;
             var markup;
-            // console.log(id_branch);
-            if (invoice.length == 0) {
-                markup = `<tr> 
-                            <td class=" ">Antrian Tersedia</td>
-                            <td class=" ">Antrian Tersedia</td>
-                            <td class=" ">Antrian Tersedia</td>
-                            <tr>`;
-                $(".table tbody").append(markup);
-                $("#firstqueue").text('0');
-                $("#totalqueue").text(' 0');
+            // console.log(data);
+            if (data.length == 0) {
+                // markup = `<tr> 
+                //             <td class=" ">Antrian Tersedia</td>
+                //             <td class=" ">Antrian Tersedia</td>
+                //             <td class=" ">Antrian Tersedia</td>
+                //             <tr>`;
+                // $(".table tbody").append(markup);
+                
+                $("#antriankosong").text("Antrian Tersedia");
+                $("#firstqueue").text("-");
+                $("#firstwaiting").text("-"+ " Menit");
+                $("#firstestimate").text("-");
+                $("#totalqueue").text(' '+"0");
 
             }else{
-                for (let i = 1; i < invoice.length; i++) {
+                $("#antriankosong").text("");
+                for (let i = 0; i < invoice.length; i++) {
                     markup = `<tr>
                                 <td class=" ">${invoice[i].invoice.queue}</td>
                                 <td class=" ">${invoice[i].estimasi} Menit</td>
                                 <td class=" ">${invoice[i].waiting}</td>
+                                <td class=" ">${invoice[i].invoice.status == 0 ? 'Belum Diproses' : 'Diproses'}</td>
                                 <tr>`;
                     var listqueue = $(".table tbody");
                     listqueue.append(markup);
@@ -133,7 +141,7 @@
         channel.bind('my-queue', function(data) {
           var dataObj = JSON.stringify(data);
           var data = JSON.parse(dataObj);
-          console.log(data);
+        //   console.log(data);
           var listqueue = $(".table tbody");
           
             listqueue.html(`
@@ -143,6 +151,24 @@
             `);
             listqueue.empty();
             getData();            
+          
+        });
+
+
+        var channel = pusher.subscribe('my-queue-update'+{{$id_branch}});
+        channel.bind('my-queue-update', function(data) {
+          var dataObj = JSON.stringify(data);
+          var data = JSON.parse(dataObj);
+          var listqueue = $(".table tbody");
+        //   console.log(listqueue);
+          
+            listqueue.html(`
+                    <tr>
+                        <td colspan="3">Loading....</td>
+                    </tr>
+            `);
+            listqueue.empty();
+            getData(); 
           
         });
 

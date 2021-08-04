@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\HistoryTransactions;
 use App\Models\User;
 use App\Models\Invoice;
+use App\Models\Branchstore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use DataTables;
+use App\Events\NotifFinishedOrder;
 
 class HistoryTransactionsController extends Controller
 {
@@ -119,7 +121,9 @@ class HistoryTransactionsController extends Controller
         if (Auth::user()->role == 'kasir') {
             return view('kasir.historytransactions.index');
         }else {
-            return view('admin.reporttransactions.index');
+            $branch = Branchstore::all()->sortBy('branch_name');
+            return view('admin.reporttransactions.index', compact('branch'));
+            // return response()->json($branch);
         }
     
     }
@@ -153,6 +157,7 @@ class HistoryTransactionsController extends Controller
                     ->orderBy('invoice.created_at', 'DESC')
                     ->whereDate('invoice.created_at', '>=', $startDate)
                     ->whereDate('invoice.created_at', '<=', $endDate)
+                    
                     // ->where('invoice.created_at', '=' )
                     ->select('invoice.*', 'branchstore.branch_name', 'employe.name')
                     ->get();
@@ -264,6 +269,15 @@ class HistoryTransactionsController extends Controller
                     ->select('invoice.*', 'branchstore.branch_name', 'employe.name')
                     ->get();  
                     
+                }else {
+                    // return response()->json($type);
+                    $data =  DB::table('invoice')
+                    ->leftJoin('branchstore', 'invoice.id_branch', '=', 'branchstore.id_branch')
+                    ->leftJoin('employe', 'invoice.id_cashier', '=', 'employe.id_user')
+                    ->orderBy('invoice.created_at', 'DESC')
+                    ->where('invoice.id_branch', $type)
+                    ->select('invoice.*', 'branchstore.branch_name', 'employe.name')
+                    ->get();  
                 }
                 return Datatables::of($data)
                             ->addIndexColumn()
@@ -288,7 +302,9 @@ class HistoryTransactionsController extends Controller
                                 return $status;
                             })
                             ->addColumn('action', function($row){
-                                $btn = '<a  href="" data-toggle="modal" class="detailModal last" data-id="'.$row->id_invoice.'">Detail</a>';
+                                // $btn = '<a  href="" data-toggle="modal" class="detailModal last" data-id="'.$row->id_invoice.'">Detail</a>';
+                                $btn = '<a  href="" data-toggle="modal" class="detailModal last" onclick="getData('.$row->id_invoice.')">Detail</a>';
+
                                 return $btn;
                             })
                             ->rawColumns(['cashs', 'pays', 'cash_returns', 'status', 'datebaru','action'])
@@ -351,9 +367,14 @@ class HistoryTransactionsController extends Controller
      */
     public function update(Request $request)
     {
+        
         $invoice = Invoice::find($request->id);
         $invoice->status = 1;
         $invoice->save();
+        
+        $user = User::where('id', Auth::user()->id)->with('employe')->latest()->first();
+        
+        event(new NotifFinishedOrder($request->id, $user->employe->id_branch));
         return response()->json('success');
     }
 
@@ -366,5 +387,11 @@ class HistoryTransactionsController extends Controller
     public function destroy(HistoryTransactions $historyTransactions)
     {
         //
+    }
+
+    public function printinvoice($id)
+    {
+        // dd($id);
+        return view('nota');
     }
 }

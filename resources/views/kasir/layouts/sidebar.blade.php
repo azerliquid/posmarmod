@@ -9,7 +9,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="{{asset('gentelella-master/production/images//img.jpg')}}" alt="..." class="img-circle profile_img">
+                <img src="{{Auth::user()->profile_photo_url}}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
@@ -27,11 +27,12 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i>Dashboard </a>
                   </li>
-                  <li><a href="{{ route('cashier.index') }}"><i class="fa fa-home"></i>Kasir </a>
+                  <li><a href="{{ route('cashier.index') }}"><i class="fa fa-calculator"></i>Kasir </a>
                   </li>
-                  <li><a href="{{ route('outcome.index') }}"><i class="fa fa-user"></i>Pengeluaran </a>
+                  <li><a href="{{ route('outcome.index') }}"><i class="fa fa-share-square-o"></i>Pengeluaran </a>
                   </li>
-                  <li><a href="{{ route('historytransactions.index') }}"><i class="fa fa-bar-chart-o"></i>Riwayat Transaksi </a>
+                  <li><a href="{{ route('historytransactions.index') }}"><i class="fa fa-money"></i>Riwayat Transaksi </a>
+                  <li><a target="_blank" href="/queue"><i class="fa fa-clock-o"></i>Antrian </a>
                   </li>
                 </ul>
               </div>

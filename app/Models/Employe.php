@@ -10,7 +10,7 @@ class Employe extends Model
 {
     protected $table = 'employe';
     protected $primaryKey = 'id_employe';
-    protected $fillable = ['name', 'nip', 'phone', 'role', 'id_branch'];
+    protected $fillable = ['name', 'nip', 'phone', 'id_branch'];
 
     public function branch()
     {

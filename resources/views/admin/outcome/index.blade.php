@@ -12,12 +12,12 @@
             <h2>Table Data Riwayat Transaksi</h2>
             <ul class="nav navbar-right panel_toolbox">
                 <div class="input-group">
-                <a target="_blank" rel="noopener noreferrer" class="btn btn-primary" href="{{ route('reportoutcome.create') }}"><i class="fa fa-print"></i> Print</a>
+                <a target="_blank" style="height:45px;" rel="noopener noreferrer" class="btn btn-primary setTypePrint" href="{{ route('reportoutcome.create') }}"><i class="fa fa-print"></i> Print</a>
                     <!-- <input type="text" class="form-control" placeholder="Ketik untuk mencari...">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-success"><i class="fa fa-search"></i> </button>
                     </span> -->
-                        <button type="button" class="btn btn-success dropdown-toggle"  data-toggle="dropdown"
+                        <button style="height:45px;" type="button" class="btn btn-success dropdown-toggle"  data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-sort-amount-asc"></i> Filter Periode
                         </button>
@@ -30,18 +30,38 @@
                             <div class="dropdown-divider"></div>
                             <!-- <a class="dropdown-item" href="#">Separa</a> -->
                         </div>
+
+                        
+                    <div class="btn-group branch" data-branch="all">
+                        <button style="height:45px;"  type="button" class="btn btn-success dropdown-toggle"  data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-sort-amount-asc"></i> Filter Cabang
+                        </button>
+                        <div class="dropdown-menu periode ">
+                            <a class="dropdown-item" href="{{ route('reportoutcome.index')}}">Semua Cabang</a>
+                            @forelse($branch2 as $b)
+                            <button class="dropdown-item" onclick="generateDatatables({{$b->id_branch}})">{{$b->branch_name}}</button>
+                            @empty
+                            <button class="dropdown-item"">Tidak Ada Cabang Tersedia</button>
+                            @endforelse
+                            <div class="dropdown-divider"></div>
+                            <!-- <a class="dropdown-item" href="#">Separa</a> -->
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+        
                         <!-- <fieldset> -->
                         <div class="control-group daterange">
                             <div class="controls">
                             <div class="input-prepend input-group">
-                                <span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
-                                <input type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" value="07/07/2021 - 07/11/2021">
+                                <input style="height:45px;" type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" value="07/07/2021 - 07/11/2021">
+                                <a style="height:45px; color:white;" target="_blank" rel="noopener noreferrer" class="btn btn-primary setDataBetween">Sortir</a>
                             </div>
                             </div>
                         </div>
                         
                         <!-- </fieldset> -->
-                        <a target="_blank" rel="noopener noreferrer" class="btn btn-primary setDataBetween">Sortir</a>
                 </div>
             </ul>
             <div class="clearfix"></div>

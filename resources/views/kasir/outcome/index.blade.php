@@ -14,7 +14,7 @@
                 <div class="input-group">
                 <!-- <a target="_blank" rel="noopener noreferrer" class="btn btn-primary" href="{{ route('reportoutcome.create') }}"><i class="fa fa-print"></i> Print</a> -->
 
-                    <button type="button" class="btn btn-success dropdown-toggle"  data-toggle="dropdown"
+                    <button style="height:45px;" type="button" class="btn btn-success dropdown-toggle"  data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-sort-amount-asc"></i> Filter Periode
                     </button>
@@ -39,7 +39,7 @@
                     </div>
                     
                     <!-- </fieldset> -->
-                    <a target="_blank" rel="noopener noreferrer" class="btn btn-primary setDataBetween">Sortir</a>
+                    <a target="_blank" style="height:45px; color:white;" rel="noopener noreferrer" class="btn btn-primary setDataBetween">Sortir</a>
                     <button id="tambah-modal" type="button" class="btn btn-round btn-info" data-toggle="modal" data-target="#modal-tambah"><i class="fa fa-plus-circle"></i> Tambah Pengeluaran</button>
                 </div>
             </ul>
